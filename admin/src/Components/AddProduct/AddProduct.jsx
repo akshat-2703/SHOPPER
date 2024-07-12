@@ -7,7 +7,7 @@ const AddProduct = () => {
     const [productDetails,setProductDetails] = useState({
         name:"",
         image:"",
-        category:"",
+        category:"women",
         new_price:"",
         old_price:""
     })
@@ -18,35 +18,33 @@ const AddProduct = () => {
 const changeHandler = (e) =>{
     setProductDetails({...productDetails,[e.target.name]:e.target.value})
 }
- 
-const Add_Product = async () =>{
- // e.preventDefault() ; 
-  console.log(image) ;
-  console.log(productDetails) ;
+ const Add_Product = async ()=>{
+  console.log(productDetails);
   let responseData ;
   let product = productDetails ;
-
+  
   let formData = new FormData() ;
   formData.append('product',image) ;
-
+   
   await fetch('http://localhost:4000/upload',{
-    method:'POST',
-   /*headers:{
-      Accept:'application/json',
-    },*/
-    body:formData,
-  }).then((resp) => resp.json()).then((data)=>{responseData=data})
-
-  if(responseData.success){
+    method : 'POST',
+    headers : {
+      Accept : 'application/json'
+    },
+    body : formData,
+  }).then((resp) => resp.json()).then((data)=>{responseData = data}) 
+ 
+  if(responseData.success)
+  {
     product.image = responseData.image_url ;
     console.log(product);
     await fetch('http://localhost:4000/addproduct',{
-      method:'POST',
-      headers:{
-        Accept:'application/json',
-        'Content-Type':'application/json',
-      },
-      body:JSON.stringify(product),
+      method : 'POST',
+      headers : {
+        Accept : 'application/json',
+        'Content-Type' : 'application/json',
+       },
+       body : JSON.stringify(product),
     }).then((resp)=>resp.json()).then((data)=>{
       data.success?alert("Product added"):alert("Failed")
     })
